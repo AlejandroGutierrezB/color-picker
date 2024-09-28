@@ -1,3 +1,4 @@
+import ColorPicker from '@/components/ColorPicker';
 import { ModeToggle } from '@/components/theme/mode-toggle';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 
@@ -15,6 +16,7 @@ function App() {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <body className="mx-auto h-screen flex max-w-6xl flex-col items-start justify-center gap-6 p-6 sm:p-10 overflow-hidden">
         <Header />
+        <ColorPicker />
       </body>
     </ThemeProvider>
   );
