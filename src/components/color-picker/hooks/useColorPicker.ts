@@ -229,11 +229,17 @@ export const useColorPicker = (
     handleClick,
   ]);
 
-  const toggleMagnifyingGlass = () => setIsActive((prev) => !prev);
+  const toggleColorPicke = () => setIsActive((prev) => !prev);
+
+  const scapeColorPicker = () => {
+    setIsActive(false);
+    handleExitColorPicker();
+  };
 
   return {
     selectedColor,
     isActive,
-    toggleMagnifyingGlass,
+    toggleColorPicke,
+    scapeColorPicker,
   };
 };
