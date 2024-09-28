@@ -1,2 +1,3 @@
-# color-picker
+# Color-picker
+
 Canvas color picker
