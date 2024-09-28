@@ -1,13 +1,37 @@
-import useImageInCanvasSetup from '@/components/color-picker/hooks/useImageInCanvasSetup';
+import { CanvasPlaceholder } from '@/components/color-picker/CanvasPlaceHolder';
+import { CopyColorButton } from '@/components/color-picker/CopyColorButton';
+import { useColorPicker } from '@/components/color-picker/hooks/useColorPicker';
+import { useImageInCanvasSetup } from '@/components/color-picker/hooks/useImageInCanvasSetup';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Pipette } from 'lucide-react';
+import { useCallback } from 'react';
 
-const ColorPicker: React.FC = () => {
+export const ColorPicker: React.FC = () => {
   const { canvasRef, containerRef, image, inputRef, handleImageSelection } =
     useImageInCanvasSetup();
+  const { selectedColor, isActive, toggleMagnifyingGlass } = useColorPicker(
+    canvasRef,
+    image
+  );
+
+  const handleClickPlaceholder = useCallback(() => {
+    inputRef.current?.click();
+  }, [inputRef]);
 
   return (
     <div className="w-full h-full bg-red flex flex-col justify-start gap-6">
       <div className="flex flex-row justify-between items-center flex-wrap">
+        <Button
+          className="flex flex-row items-center gap-2"
+          onClick={toggleMagnifyingGlass}
+          variant={isActive ? 'default' : 'ghost'}
+          aria-label="Color picker"
+          disabled={!image}
+        >
+          <Pipette size={24} />
+        </Button>
+        <CopyColorButton selectedColor={selectedColor} />
         <Input
           type="file"
           accept="image/*"
@@ -25,20 +49,12 @@ const ColorPicker: React.FC = () => {
           <canvas
             ref={canvasRef}
             className="max-w-full max-h-full object-contain"
+            style={{ cursor: isActive ? 'none' : 'default' }}
           />
         ) : (
-          <div className="w-full h-full flex justify-center items-center bg-gray-100 dark:bg-gray-600 rounded-lg">
-            <p
-              className="text-gray-500 dark:text-gray-200 cursor-pointer"
-              onClick={() => inputRef.current?.click()}
-            >
-              Upload an image to get started
-            </p>
-          </div>
+          <CanvasPlaceholder action={handleClickPlaceholder} />
         )}
       </div>
     </div>
   );
 };
-
-export default ColorPicker;

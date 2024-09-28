@@ -16,7 +16,7 @@ const useImageLoad = (imageSrc: string | null) => {
   return image;
 };
 
-const useImageInCanvasSetup = () => {
+export const useImageInCanvasSetup = () => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -83,5 +83,3 @@ const useImageInCanvasSetup = () => {
 
   return { canvasRef, containerRef, image, inputRef, handleImageSelection };
 };
-
-export default useImageInCanvasSetup;
