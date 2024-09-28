@@ -1,4 +1,4 @@
-import ColorPicker from '@/components/ColorPicker';
+import ColorPicker from '@/components/color-picker/ColorPicker';
 import { ModeToggle } from '@/components/theme/mode-toggle';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 

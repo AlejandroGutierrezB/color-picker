@@ -1,8 +1,8 @@
-import { Input } from '@/components/ui/input';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const useImageLoad = (imageSrc: string | null) => {
   const [image, setImage] = useState<HTMLImageElement | null>(null);
+
   useEffect(() => {
     if (!imageSrc) return;
     const img = new Image();
@@ -16,7 +16,11 @@ const useImageLoad = (imageSrc: string | null) => {
   return image;
 };
 
-const useCanvasSetup = (imageSrc: string | null) => {
+const useImageInCanvasSetup = () => {
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const image = useImageLoad(imageSrc);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -60,16 +64,7 @@ const useCanvasSetup = (imageSrc: string | null) => {
     return () => resizeObserver.disconnect();
   }, [image]);
 
-  return { canvasRef, containerRef };
-};
-
-const ColorPicker: React.FC = () => {
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const { canvasRef, containerRef } = useCanvasSetup(imageSrc);
-
-  const handleImageUpload = useCallback(
+  const handleImageSelection = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
       if (file) {
@@ -83,43 +78,10 @@ const ColorPicker: React.FC = () => {
         reader.readAsDataURL(file);
       }
     },
-    []
+    [setImageSrc]
   );
 
-  return (
-    <div className="w-full h-full bg-red flex flex-col justify-start gap-6">
-      <div className="flex flex-row justify-between items-center flex-wrap">
-        <Input
-          type="file"
-          accept="image/*"
-          multiple={false}
-          onChange={handleImageUpload}
-          className="w-min max-w-64"
-          ref={inputRef}
-        />
-      </div>
-      <div
-        ref={containerRef}
-        className="w-full h-full overflow-auto flex justify-center items-start"
-      >
-        {imageSrc ? (
-          <canvas
-            ref={canvasRef}
-            className="max-w-full max-h-full object-contain"
-          />
-        ) : (
-          <div className="w-full h-full flex justify-center items-center bg-gray-100 dark:bg-gray-600 rounded-lg">
-            <p
-              className="text-gray-500 dark:text-gray-200 cursor-pointer"
-              onClick={() => inputRef.current?.click()}
-            >
-              Upload an image to get started
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  return { canvasRef, containerRef, image, inputRef, handleImageSelection };
 };
 
-export default ColorPicker;
+export default useImageInCanvasSetup;
